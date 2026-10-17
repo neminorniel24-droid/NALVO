@@ -1,0 +1,288 @@
+<!--
+  Nalvo - Local business directory for Tamil Nadu and Kerala
+  Copyright (c) 2026 [YOUR FULL NAME]. All rights reserved.
+  Proprietary software. See the LICENSE file. Unauthorised copying,
+  modification or redistribution is prohibited.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nalvo – Local Business Directory | Tamil Nadu and Kerala</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif:wght@600;700&family=Noto+Sans+Tamil:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#f6f4ee;--card:#fff;--ink:#17231d;--mut:#5f6d65;--line:#e3ddd0;--pri:#0b6b4a;--priInk:#fff;--priSoft:#e3f1ea;--acc:#ffb703;--accInk:#2a1f00;--gold:#c9962b;--goldSoft:#f8efd6;--h1:#093d2b;--h2:#0e6a49;--shadow:0 2px 4px rgba(10,40,28,.06),0 10px 28px rgba(10,40,28,.10);color-scheme:light;box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1411;--card:#16211b;--ink:#eef3ef;--mut:#9baba2;--line:#28372f;--pri:#3fd39b;--priInk:#06241a;--priSoft:#1c2f26;--goldSoft:#2b2515;--shadow:none;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1411;--card:#16211b;--ink:#eef3ef;--mut:#9baba2;--line:#28372f;--pri:#3fd39b;--priInk:#06241a;--priSoft:#1c2f26;--goldSoft:#2b2515;--shadow:none;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter','Noto Sans Tamil','Noto Sans Malayalam',system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+.top{position:sticky;top:0;z-index:20;background:var(--h1);padding-top:env(safe-area-inset-top,0px);border-bottom:3px double var(--gold)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 18px}
+.brand{display:flex;flex-direction:column;line-height:1.1;color:#fff}
+.brand b{font-family:'Noto Serif',Georgia,serif;font-size:24px;letter-spacing:-.4px}.brand i{font-style:normal;color:var(--acc)}
+.brand small{font-size:11px;letter-spacing:1.6px;opacity:.7}
+.right{display:flex;align-items:center;gap:10px}
+.seg{display:inline-flex;background:rgba(255,255,255,.12);border-radius:99px;padding:3px}
+.seg button{background:transparent;border:0;border-radius:99px;padding:6px 12px;font-size:13px;cursor:pointer;color:#fff;opacity:.8}
+.seg button.on{background:#fff;color:var(--h1);font-weight:700;opacity:1}
+button,input,select,textarea{font:inherit;color:inherit}
+.btn{background:var(--acc);color:var(--accInk);border:0;border-radius:99px;padding:10px 20px;font-weight:700;cursor:pointer}
+.btn:hover{filter:brightness(1.06)}.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.hero{background:radial-gradient(circle at 85% 20%,rgba(255,183,3,.22),transparent 40%),linear-gradient(135deg,var(--h1),var(--h2));color:#fff;padding:36px 0 62px}
+.hero h1{font-family:'Noto Serif',Georgia,serif;font-size:clamp(28px,5.2vw,48px);line-height:1.15;margin:0 0 12px;max-width:800px;letter-spacing:-.8px}
+.hero p{margin:0 0 24px;max-width:640px;opacity:.88;font-size:16.5px}
+.search{display:flex;align-items:center;gap:10px;background:#fff;color:#17231d;border-radius:16px;padding:6px 8px 6px 16px;box-shadow:0 12px 30px rgba(0,0,0,.28);max-width:760px}
+.search svg{flex:none;width:22px;height:22px;stroke:#0b6b4a;fill:none;stroke-width:2.2}
+.search input{border:0;background:transparent;padding:13px 4px;font-size:16.5px;color:#17231d;outline:0;width:100%}
+.pills{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.pills select{width:auto;min-width:170px;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:99px;padding:9px 16px;font-weight:600}
+.pills select option{color:#17231d}
+input,select,textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--pri);border-color:transparent}
+.note{background:var(--goldSoft);color:var(--ink);border-radius:10px;padding:9px 12px;font-size:13.5px;margin-top:14px;display:none;max-width:760px}
+.tiles{display:flex;gap:6px;overflow-x:auto;background:var(--card);border-radius:20px;padding:16px 12px;margin-top:-34px;position:relative;box-shadow:var(--shadow);scrollbar-width:none}
+.tiles::-webkit-scrollbar{display:none}
+.tile{flex:none;width:96px;background:transparent;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;padding:4px 0;color:var(--ink)}
+.tile .ic{width:58px;height:58px;border-radius:18px;background:var(--priSoft);display:flex;align-items:center;justify-content:center;transition:.15s}
+.tile svg{width:27px;height:27px;stroke:var(--pri);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tile span{font-size:12.5px;line-height:1.25;text-align:center;font-weight:500}
+.tile.on .ic{background:var(--pri);transform:translateY(-2px)}.tile.on svg{stroke:var(--priInk)}.tile.on span{font-weight:700;color:var(--pri)}
+.count{margin:30px 0 16px;font-size:22px;font-weight:800;letter-spacing:-.4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:22px;padding-bottom:100px}
+.card{background:var(--card);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow);border:1px solid var(--line);transition:transform .15s}
+.card:hover{transform:translateY(-3px)}
+.ph{height:190px;position:relative;background:linear-gradient(135deg,var(--h2),var(--h1)) center/cover;display:flex;align-items:flex-end}
+.ph .wm{position:absolute;right:16px;top:2px;font-family:'Noto Serif',Georgia,serif;font-size:110px;font-weight:700;color:#fff;opacity:.14;line-height:1}
+.shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(5,25,16,.88),rgba(5,25,16,.05) 65%)}
+.badge{position:absolute;left:12px;top:12px;background:var(--acc);color:var(--accInk);border-radius:99px;padding:4px 12px;font-size:12px;font-weight:700}
+.ph h3{position:relative;margin:0;padding:14px 16px;color:#fff;font-size:21px;line-height:1.25;font-weight:800;letter-spacing:-.3px}
+.cb{padding:14px 16px 16px;display:flex;flex-direction:column;gap:11px;flex:1}
+.loc{display:flex;gap:6px;align-items:flex-start;color:var(--mut);font-size:13.5px;font-weight:500}
+.loc svg{flex:none;width:16px;height:16px;margin-top:2px;stroke:var(--pri);fill:none;stroke-width:2}
+.desc{font-size:14.5px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tags{display:flex;flex-wrap:wrap;gap:6px}.tag{background:var(--priSoft);color:var(--pri);border-radius:99px;padding:3px 11px;font-size:12.5px;font-weight:600}
+.kv{font-size:13.5px;margin:0;display:grid;grid-template-columns:minmax(80px,auto) 1fr;gap:6px 14px;background:var(--bg);border-radius:12px;padding:11px 13px}
+.kv dt{color:var(--mut)}.kv dd{margin:0;font-weight:600}
+.acts{display:flex;gap:8px;margin-top:auto;padding-top:4px}
+.acts a,.acts button{flex:1;text-align:center;text-decoration:none;border-radius:12px;padding:12px 8px;font-size:14.5px;font-weight:700;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.acts a.p{flex:1.4;background:var(--pri);border-color:var(--pri);color:var(--priInk)}
+.empty{grid-column:1/-1;text-align:center;padding:64px 14px;color:var(--mut);background:var(--card);border-radius:20px;border:1px dashed var(--line)}
+.empty b{display:block;color:var(--ink);font-size:20px;margin-bottom:6px}
+.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--acc);color:var(--accInk);border:0;border-radius:99px;padding:14px 22px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.3);cursor:pointer}
+@media(min-width:760px){.fab{display:none}}
+@media(max-width:759px){#addBtn{display:none}.hero{padding-top:26px}}
+footer{border-top:1px solid var(--line);padding:22px 0 90px;color:var(--mut);font-size:13px;text-align:center}
+dialog{border:0;border-radius:20px;padding:0;width:min(680px,95vw);max-height:92vh;background:var(--bg);color:var(--ink)}
+dialog::backdrop{background:rgba(5,15,10,.65)}
+.fm{padding:22px;overflow-y:auto;max-height:90vh}
+.fm h2{margin:0 0 2px;font-family:'Noto Serif',Georgia,serif}
+.sub{color:var(--mut);font-size:14px;margin-bottom:6px}
+.fm label{display:block;font-size:13.5px;font-weight:700;margin:14px 0 5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:560px){.two{grid-template-columns:1fr}}
+.xtra{border:1px solid var(--line);border-left:5px solid var(--acc);border-radius:12px;padding:2px 14px 14px;margin-top:18px;background:var(--card)}
+.xtra h4{margin:14px 0 0;color:var(--pri);font-size:14.5px}
+.row{display:flex;gap:10px;justify-content:flex-end;margin-top:22px}
+.pv{max-width:100%;height:120px;object-fit:cover;border-radius:12px;margin-top:8px;display:none}
+
+.hero{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><g fill='none' stroke='white' stroke-opacity='.13' stroke-width='1.2'><path d='M32 6L58 32 32 58 6 32z'/><path d='M32 18L46 32 32 46 18 32z'/><circle cx='32' cy='32' r='4'/></g><g fill='white' fill-opacity='.2'><circle cx='6' cy='6' r='1.8'/><circle cx='58' cy='6' r='1.8'/><circle cx='6' cy='58' r='1.8'/><circle cx='58' cy='58' r='1.8'/></g></svg>"),radial-gradient(circle at 85% 20%,rgba(255,183,3,.25),transparent 42%),linear-gradient(135deg,var(--h1),var(--h2))}
+.temple{height:9px;background:linear-gradient(135deg,var(--gold) 25%,transparent 25%) -9px 0/18px 9px,linear-gradient(225deg,var(--gold) 25%,transparent 25%) -9px 0/18px 9px;background-color:var(--h1)}
+.top{border-bottom:0}
+footer{position:relative}footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:9px;background:linear-gradient(135deg,var(--gold) 25%,transparent 25%) -9px 0/18px 9px,linear-gradient(225deg,var(--gold) 25%,transparent 25%) -9px 0/18px 9px;opacity:.7}
+.pills .nb{display:inline-flex;align-items:center;gap:8px;background:var(--acc);color:var(--accInk);border:0;border-radius:99px;padding:9px 18px;font-weight:800;cursor:pointer}
+.pills .nb svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2}
+.pills .nb.on{background:#fff;box-shadow:0 0 0 3px var(--acc)}
+.dd{margin-left:auto;flex:none;background:var(--priSoft);color:var(--pri);border-radius:99px;padding:1px 10px;font-size:12px;font-weight:800}
+.locrow{display:flex;align-items:center;gap:12px;margin-top:10px}.locrow .btn{padding:8px 14px;font-size:13.5px}.hint{color:var(--mut);font-size:13px}
+</style>
+</head>
+<body>
+<header class="top"><div class="bar">
+ <div class="brand"><b>Nal<i>vo</i></b><small>TAMIL NADU | KERALA</small></div>
+ <div class="right"><div class="seg" id="lang"><button data-l="en" class="on">EN</button><button data-l="ta">தமிழ்</button><button data-l="ml">മലയാളം</button></div>
+ <button class="btn" id="addBtn" data-i="add"></button></div>
+</div><div class="temple"></div></header>
+<section class="hero"><div class="wrap">
+ <h1 data-i="h1"></h1><p data-i="p"></p>
+ <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" data-ip="q" autocomplete="off"></div>
+ <div class="pills"><select id="state"></select><select id="dist"></select><button type="button" class="nb" id="near"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span data-i="near"></span></button></div>
+ <div class="note" id="note"></div>
+</div></section>
+<div class="wrap">
+ <div class="tiles" id="chips"></div>
+ <div class="count" id="count"></div>
+ <main class="grid" id="grid"></main>
+</div>
+<button class="fab" id="fab"><span data-i="add"></span></button>
+<footer>Nalvo &middot; Free local listings for Tamil Nadu and Kerala</footer>
+
+<dialog id="dlg"><form class="fm" id="form" method="dialog" onsubmit="return false">
+ <h2 data-i="formT"></h2><div class="sub" data-i="formS"></div>
+ <label data-i="f_name"></label><input id="f_name" maxlength="80">
+ <div class="two"><div><label data-i="f_cat"></label><select id="f_cat"></select></div><div><label data-i="f_ph"></label><input id="f_ph" inputmode="tel" maxlength="15" placeholder="10-digit mobile"></div></div>
+ <div class="two"><div><label data-i="f_state"></label><select id="f_state"></select></div><div><label data-i="f_dist"></label><select id="f_dist"></select></div></div>
+ <div class="two"><div><label data-i="f_area"></label><input id="f_area" maxlength="60" placeholder="e.g. Gandhipuram / Edappally"></div><div><label data-i="f_time"></label><input id="f_time" maxlength="80" placeholder="Mon-Sat 9:00 AM - 8:00 PM"></div></div>
+ <label data-i="f_addr"></label><input id="f_addr" maxlength="160">
+ <div class="locrow"><button type="button" class="btn ghost" id="getloc" data-i="locBtn"></button><span class="hint" id="locst"></span></div>
+ <label data-i="f_map"></label><input id="f_map" maxlength="300" placeholder="https://maps.app.goo.gl/...">
+ <label data-i="f_desc"></label><textarea id="f_desc" rows="3" maxlength="400" placeholder="Years in business, experience, what makes you different"></textarea>
+ <label data-i="f_tags"></label><input id="f_tags" maxlength="200" placeholder="Royal Enfield, EV service, bike wash">
+ <div class="xtra" id="xtra"></div>
+ <label data-i="f_img"></label><input type="file" id="f_img" accept="image/*"><img class="pv" id="pv" alt="">
+ <div class="row"><button type="button" class="btn ghost" id="cancel" data-i="cancel"></button><button type="button" class="btn" id="save" data-i="pub"></button></div>
+</form></dialog>
+
+<script>
+const CATS={
+ "Mechanics & Repair":["Vehicle types handled","Brands you specialise in","Typical service price","Pickup / drop available","Warranty on work"],
+ "Gyms & Fitness":["Monthly fee","Trainers and experience","Women-only batch","Facilities available","Free trial days"],
+ "Training & Courses":["Courses offered","Course fees","Batch timings","Online / offline","Certificate / placement support"],
+ "Tuition & Coaching":["Subjects and classes","Board (State / CBSE)","Medium (Tamil / Malayalam / English)","Monthly fee","Batch size"],
+ "Salon & Beauty":["Services and price list","Men / Women / Unisex","Appointment needed","Home service"],
+ "Food & Catering":["Cuisine / speciality","Price range per person","Home delivery","Bulk / event orders"],
+ "Electronics & Tech":["Products / repairs","Brands handled","Warranty","Home service"],
+ "Ayurveda & Wellness":["Treatments offered","Doctor qualification","Consultation fee","Appointment needed"],
+ "Other":["Key products / services","Price range","Delivery available"]};
+const CN={ta:["இயந்திர பழுது பார்ப்பு","உடற்பயிற்சி நிலையங்கள்","பயிற்சி & படிப்புகள்","டியூஷன் & பயிற்சி வகுப்பு","சலூன் & அழகு","உணவு & கேட்டரிங்","எலக்ட்ரானிக்ஸ் & தொழில்நுட்பம்","ஆயுர்வேதம் & நலன்","மற்றவை"],
+ ml:["മെക്കാനിക്ക് & റിപ്പയർ","ജിം & ഫിറ്റ്നസ്","പരിശീലനം & കോഴ്സുകൾ","ട്യൂഷൻ & കോച്ചിംഗ്","സലൂൺ & ബ്യൂട്ടി","ഭക്ഷണം & കാറ്ററിംഗ്","ഇലക്ട്രോണിക്സ് & ടെക്","ആയുർവേദം & ആരോഗ്യം","മറ്റുള്ളവ"]};
+const D={"Tamil Nadu":"Ariyalur,Chengalpattu,Chennai,Coimbatore,Cuddalore,Dharmapuri,Dindigul,Erode,Kallakurichi,Kancheepuram,Kanniyakumari,Karur,Krishnagiri,Madurai,Mayiladuthurai,Nagapattinam,Namakkal,Nilgiris,Perambalur,Pudukkottai,Ramanathapuram,Ranipet,Salem,Sivaganga,Tenkasi,Thanjavur,Theni,Thoothukudi,Tiruchirappalli,Tirunelveli,Tirupathur,Tiruppur,Tiruvallur,Tiruvannamalai,Tiruvarur,Vellore,Viluppuram,Virudhunagar".split(","),
+ "Kerala":"Alappuzha,Ernakulam,Idukki,Kannur,Kasaragod,Kollam,Kottayam,Kozhikode,Malappuram,Palakkad,Pathanamthitta,Thiruvananthapuram,Thrissur,Wayanad".split(",")};
+const SN={ta:{"Tamil Nadu":"தமிழ்நாடு","Kerala":"கேரளா"},ml:{"Tamil Nadu":"തമിഴ്നാട്","Kerala":"കേരളം"}};
+const T={
+en:{near:"Near me",locBtn:"Use my current location",dir:"Directions",km:"km",locOk:"Location saved",locErr:"Could not get your location. Please allow location access.",h1:"Find trusted local businesses, with real details.",p:"Mechanics, gyms, training centres, tuition and more across Tamil Nadu and Kerala. Photos, services, fees and timings, shared by the owners themselves.",add:"List your business",q:"Search: bike service, women trainer, Python course",allSt:"All states",allDist:"All districts",all:"All",found:n=>n+(n==1?" business found":" businesses found"),none:"No businesses listed yet.",noneQ:"Nothing matches your search.",noneSub:"Own a business? Be the first to list it.",call:"Call",wa:"WhatsApp",map:"Map",del:"Delete",formT:"List your business",formS:"Free. The more detail you give, the more customers you reach.",f_name:"Business name *",f_cat:"Category *",f_ph:"Phone / WhatsApp *",f_state:"State *",f_dist:"District *",f_area:"Locality / town *",f_time:"Timings",f_addr:"Full address",f_map:"Google Maps link (optional)",f_desc:"About your business",f_tags:"Services / specialities (comma separated)",f_img:"Photo of your shop (optional)",pub:"Publish listing",cancel:"Cancel",det:"Details customers look for",tm:"Timings",ad:"Address"},
+ta:{near:"என் அருகில்",locBtn:"என் தற்போதைய இடத்தைப் பயன்படுத்து",dir:"வழி",km:"கி.மீ",locOk:"இடம் சேமிக்கப்பட்டது",locErr:"உங்கள் இடத்தை பெற முடியவில்லை. இருப்பிட அனுமதியை வழங்கவும்.",h1:"நம்பகமான உள்ளூர் தொழில்களை, உண்மையான விவரங்களுடன் கண்டறியுங்கள்.",p:"தமிழ்நாடு மற்றும் கேரளா முழுவதும் மெக்கானிக், ஜிம், பயிற்சி மையங்கள், டியூஷன் மற்றும் பல. புகைப்படம், சேவைகள், கட்டணம், நேரம் - உரிமையாளர்களே பகிர்ந்தவை.",add:"தொழிலைப் பதிவு செய்க",q:"தேடுக: பைக் சர்வீஸ், பெண் பயிற்சியாளர், பைதான் வகுப்பு",allSt:"அனைத்து மாநிலங்கள்",allDist:"அனைத்து மாவட்டங்கள்",all:"அனைத்தும்",found:n=>n+" தொழில்கள் கிடைத்தன",none:"இன்னும் எந்த தொழிலும் பதிவு செய்யப்படவில்லை.",noneQ:"தேடலுக்கு பொருத்தமானவை இல்லை.",noneSub:"உங்களிடம் தொழில் உள்ளதா? முதலில் பதிவு செய்யுங்கள்.",call:"அழைக்க",wa:"வாட்ஸ்அப்",map:"வரைபடம்",del:"நீக்கு",formT:"உங்கள் தொழிலைப் பதிவு செய்யுங்கள்",formS:"இலவசம். எவ்வளவு விவரம் தருகிறீர்களோ, அவ்வளவு வாடிக்கையாளர்கள் வருவார்கள்.",f_name:"தொழில் பெயர் *",f_cat:"வகை *",f_ph:"தொலைபேசி / வாட்ஸ்அப் *",f_state:"மாநிலம் *",f_dist:"மாவட்டம் *",f_area:"பகுதி / ஊர் *",f_time:"நேரம்",f_addr:"முழு முகவரி",f_map:"கூகுள் மேப் இணைப்பு (விருப்பம்)",f_desc:"உங்கள் தொழில் பற்றி",f_tags:"சேவைகள் / சிறப்புகள் (கமாவால் பிரிக்கவும்)",f_img:"கடையின் புகைப்படம் (விருப்பம்)",pub:"பதிவிடு",cancel:"ரத்து",det:"வாடிக்கையாளர்கள் தேடும் விவரங்கள்",tm:"நேரம்",ad:"முகவரி"},
+ml:{near:"എന്റെ അടുത്ത്",locBtn:"എന്റെ നിലവിലെ സ്ഥലം ഉപയോഗിക്കുക",dir:"വഴി",km:"കി.മീ",locOk:"സ്ഥലം സേവ് ചെയ്തു",locErr:"നിങ്ങളുടെ സ്ഥലം ലഭ്യമായില്ല. ലൊക്കേഷൻ അനുമതി നൽകുക.",h1:"വിശ്വസ്തരായ പ്രാദേശിക സ്ഥാപനങ്ങളെ, യഥാർത്ഥ വിവരങ്ങളോടെ കണ്ടെത്തൂ.",p:"തമിഴ്നാട്ടിലും കേരളത്തിലുമായി മെക്കാനിക്ക്, ജിം, ട്രെയിനിംഗ് സെന്റർ, ട്യൂഷൻ എന്നിവയും മറ്റും. ഫോട്ടോ, സേവനങ്ങൾ, നിരക്ക്, സമയം - ഉടമകൾ തന്നെ നൽകിയത്.",add:"സ്ഥാപനം ചേർക്കുക",q:"തിരയുക: ബൈക്ക് സർവീസ്, വനിതാ ട്രെയിനർ, പൈത്തൺ കോഴ്സ്",allSt:"എല്ലാ സംസ്ഥാനങ്ങളും",allDist:"എല്ലാ ജില്ലകളും",all:"എല്ലാം",found:n=>n+" സ്ഥാപനങ്ങൾ കണ്ടെത്തി",none:"ഇതുവരെ സ്ഥാപനങ്ങളൊന്നും ചേർത്തിട്ടില്ല.",noneQ:"തിരച്ചിലിന് അനുയോജ്യമായവ ഇല്ല.",noneSub:"നിങ്ങൾക്ക് സ്ഥാപനമുണ്ടോ? ആദ്യം ചേർക്കൂ.",call:"വിളിക്കുക",wa:"വാട്സ്ആപ്പ്",map:"മാപ്പ്",del:"ഇല്ലാതാക്കുക",formT:"നിങ്ങളുടെ സ്ഥാപനം ചേർക്കുക",formS:"സൗജന്യം. കൂടുതൽ വിവരങ്ങൾ നൽകിയാൽ കൂടുതൽ ഉപഭോക്താക്കൾ.",f_name:"സ്ഥാപനത്തിന്റെ പേര് *",f_cat:"വിഭാഗം *",f_ph:"ഫോൺ / വാട്സ്ആപ്പ് *",f_state:"സംസ്ഥാനം *",f_dist:"ജില്ല *",f_area:"സ്ഥലം / പ്രദേശം *",f_time:"സമയം",f_addr:"പൂർണ്ണ വിലാസം",f_map:"ഗൂഗിൾ മാപ്പ് ലിങ്ക് (ഓപ്ഷണൽ)",f_desc:"നിങ്ങളുടെ സ്ഥാപനത്തെക്കുറിച്ച്",f_tags:"സേവനങ്ങൾ / പ്രത്യേകതകൾ (കോമ ഉപയോഗിച്ച് വേർതിരിക്കുക)",f_img:"കടയുടെ ഫോട്ടോ (ഓപ്ഷണൽ)",pub:"പ്രസിദ്ധീകരിക്കുക",cancel:"റദ്ദാക്കുക",det:"ഉപഭോക്താക്കൾ തിരയുന്ന വിവരങ്ങൾ",tm:"സമയം",ad:"വിലാസം"}};
+const $=id=>document.getElementById(id);
+const CK=Object.keys(CATS);
+let pos=null,fpos=null,lang="en",items=[],cat="",db=null,uid=null,canEdit=false;
+try{lang=localStorage.getItem("nl")||"en"}catch(e){}
+const t=k=>(T[lang]&&T[lang][k]!==undefined?T[lang][k]:T.en[k]);
+const cname=c=>lang==="en"?c:CN[lang][CK.indexOf(c)];
+const sname=s=>lang==="en"?s:SN[lang][s];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function note(m){const n=$("note");n.textContent=m;n.style.display=m?"block":"none"}
+
+function fillSel(sel,vals,first,keep){
+ const cur=keep?sel.value:"";
+ sel.innerHTML=(first?`<option value="">${esc(first)}</option>`:"")+vals.map(v=>`<option value="${esc(v[0])}">${esc(v[1])}</option>`).join("");
+ if(cur&&vals.some(v=>v[0]===cur))sel.value=cur;
+}
+function drawFilters(){
+ fillSel($("state"),Object.keys(D).map(s=>[s,sname(s)]),t("allSt"),true);
+ drawDist();
+}
+function drawDist(){
+ const s=$("state").value;
+ const ds=s?D[s]:[...new Set(items.map(i=>i.dist).filter(Boolean))].sort();
+ fillSel($("dist"),ds.map(d=>[d,d]),t("allDist"),true);
+}
+const IC={"":'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+"Mechanics & Repair":'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/>',
+"Gyms & Fitness":'<path d="M6 7v10M18 7v10M3 9v6M21 9v6M6 12h12"/>',
+"Training & Courses":'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/>',
+"Tuition & Coaching":'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/>',
+"Salon & Beauty":'<circle cx="6" cy="7" r="3"/><circle cx="6" cy="17" r="3"/><path d="M8.5 8.5L20 19M8.5 15.5L20 5"/>',
+"Food & Catering":'<path d="M7 3v8M4 3v5a3 3 0 0 0 6 0V3M7 11v10M17 3c-2 2-3 5-3 8h3v10"/>',
+"Electronics & Tech":'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',
+"Ayurveda & Wellness":'<path d="M5 19c0-9 5-14 15-14 0 10-5 15-14 15"/><path d="M5 19c3-5 6-8 10-10"/>',
+"Other":'<path d="M3 9l1-5h16l1 5M4 9v11h16V9M9 20v-6h6v6"/>'};
+const PIN='<svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+function drawChips(){
+ const all=[["",t("all")],...CK.map(c=>[c,cname(c)])];
+ $("chips").innerHTML=all.map(c=>`<button class="tile ${c[0]===cat?"on":""}" data-c="${esc(c[0])}"><div class="ic"><svg viewBox="0 0 24 24">${IC[c[0]]}</svg></div><span>${esc(c[1])}</span></button>`).join("");
+ $("chips").querySelectorAll(".tile").forEach(b=>b.onclick=()=>{cat=b.dataset.c;drawChips();render()});
+}
+function applyLang(){
+ document.documentElement.lang=lang;
+ document.querySelectorAll("[data-i]").forEach(e=>e.textContent=t(e.dataset.i));
+ document.querySelectorAll("[data-ip]").forEach(e=>e.placeholder=t(e.dataset.ip));
+ document.querySelectorAll("#lang button").forEach(b=>b.classList.toggle("on",b.dataset.l===lang));
+ fillSel($("f_cat"),CK.map(c=>[c,cname(c)]));
+ fillSel($("f_state"),Object.keys(D).map(s=>[s,sname(s)]));drawFormDist();drawXtra();
+ drawFilters();drawChips();render();
+}
+document.querySelectorAll("#lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;try{localStorage.setItem("nl",lang)}catch(e){}applyLang()});
+
+const hav=(a,b,c,d)=>{const r=Math.PI/180,x=Math.sin((c-a)*r/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin((d-b)*r/2)**2;return 12742*Math.asin(Math.sqrt(x))};
+const dk=i=>(pos&&i.lat!=null&&i.lng!=null)?hav(pos.lat,pos.lng,i.lat,i.lng):1e9;
+const dtxt=i=>dk(i)<1e8?`<span class="dd">${dk(i).toFixed(1)} ${t("km")}</span>`:"";
+const dir=i=>/^https:\/\//.test(i.map||"")?i.map:"https://www.google.com/maps/dir/?api=1&destination="+(i.lat!=null&&i.lng!=null?i.lat+","+i.lng:encodeURIComponent([i.name,i.addr,i.area,i.dist,i.state].filter(Boolean).join(", ")));
+function render(){
+ const q=$("q").value.toLowerCase().trim(),s=$("state").value,d=$("dist").value;
+ const list=items.filter(i=>(!cat||i.cat===cat)&&(!s||i.state===s)&&(!d||i.dist===d)&&(!q||JSON.stringify(i).toLowerCase().includes(q)));
+ if(pos)list.sort((a,b)=>dk(a)-dk(b));
+ $("count").textContent=t("found")(list.length);
+ if(!list.length){$("grid").innerHTML=`<div class="empty"><b>${t(items.length?"noneQ":"none")}</b>${t("noneSub")}</div>`;return}
+ $("grid").innerHTML=list.map(i=>{
+  const ph=String(i.ph||"").replace(/\D/g,"").slice(-10);
+  const tags=(i.tags||[]).map(x=>`<span class="tag">${esc(x)}</span>`).join("");
+  const ex=Object.entries(i.extra||{}).filter(e=>e[1]).map(e=>`<dt>${esc(e[0])}</dt><dd>${esc(e[1])}</dd>`).join("");
+  const mine=(uid&&i.owner===uid)||canEdit;
+  const map=/^https:\/\//.test(i.map||"")?`<a href="${esc(i.map)}" target="_blank" rel="noopener">${t("map")}</a>`:"";
+  return `<article class="card"><div class="ph" style="${i.img?`background-image:url('${esc(i.img)}')`:""}">${i.img?"":`<span class="wm">${esc((i.name||"?").trim().charAt(0).toUpperCase())}</span>`}<div class="shade"></div><div class="badge">${esc(cname(i.cat))}</div><h3>${esc(i.name)}</h3></div><div class="cb">
+   <div class="loc">${PIN}<span>${esc(i.area)}, ${esc(i.dist)}, ${esc(sname(i.state)||i.state)}</span>${dtxt(i)}</div>
+   ${i.desc?`<div class="desc">${esc(i.desc)}</div>`:""}${tags?`<div class="tags">${tags}</div>`:""}
+   ${(i.time||i.addr||ex)?`<dl class="kv">${i.time?`<dt>${t("tm")}</dt><dd>${esc(i.time)}</dd>`:""}${i.addr?`<dt>${t("ad")}</dt><dd>${esc(i.addr)}</dd>`:""}${ex}</dl>`:""}
+   <div class="acts"><a class="p" href="tel:+91${ph}">${t("call")}</a><a href="https://wa.me/91${ph}" target="_blank" rel="noopener">${t("wa")}</a><a href="${esc(dir(i))}" target="_blank" rel="noopener">${t("dir")}</a>${mine?`<button data-del="${esc(i.id)}">${t("del")}</button>`:""}</div>
+  </div></article>`}).join("");
+ $("grid").querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{
+  if(!confirm("Delete this listing?"))return;
+  try{if(db)await db.collection("listings").doc(b.dataset.del).delete();else{items=items.filter(x=>x.id!==b.dataset.del);render()}}catch(e){note("You do not have permission to delete this listing.")}});
+}
+
+function drawFormDist(){fillSel($("f_dist"),D[$("f_state").value||"Tamil Nadu"].map(d=>[d,d]))}
+function drawXtra(){
+ const c=$("f_cat").value||CK[0];
+ $("xtra").innerHTML=`<h4>${esc(t("det"))}: ${esc(cname(c))}</h4>`+CATS[c].map(l=>`<label>${esc(l)}</label><input data-x="${esc(l)}" maxlength="120">`).join("");
+}
+$("f_cat").onchange=drawXtra;$("f_state").onchange=drawFormDist;
+$("state").onchange=()=>{drawDist();render()};$("dist").onchange=render;$("q").addEventListener("input",render);
+let imgData="";
+$("f_img").onchange=e=>{
+ const f=e.target.files[0];if(!f)return;
+ const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{
+  const w=Math.min(640,im.width),h=im.height*w/im.width,cv=document.createElement("canvas");cv.width=w;cv.height=h;
+  cv.getContext("2d").drawImage(im,0,0,w,h);imgData=cv.toDataURL("image/jpeg",.7);
+  $("pv").src=imgData;$("pv").style.display="block"};im.src=r.result};r.readAsDataURL(f);
+};
+$("addBtn").onclick=$("fab").onclick=()=>$("dlg").showModal();
+$("cancel").onclick=()=>$("dlg").close();
+$("save").onclick=async()=>{
+ const g=id=>$(id).value.trim();
+ if(!g("f_name")||!g("f_area")||g("f_ph").replace(/\D/g,"").length<10){alert("Please fill business name, locality and a valid 10-digit phone number.");return}
+ const extra={};$("xtra").querySelectorAll("[data-x]").forEach(i=>{if(i.value.trim())extra[i.dataset.x]=i.value.trim()});
+ const rec={name:g("f_name"),cat:$("f_cat").value,state:$("f_state").value,dist:$("f_dist").value,area:g("f_area"),ph:g("f_ph"),time:g("f_time"),addr:g("f_addr"),map:g("f_map"),desc:g("f_desc"),
+  tags:g("f_tags").split(",").map(s=>s.trim()).filter(Boolean).slice(0,12),extra,img:imgData,...(fpos?{lat:fpos.lat,lng:fpos.lng}:{}),owner:uid||"anon",created:Date.now()};
+ const id="b"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+ try{
+  if(db)await db.collection("listings").doc(id).set(rec);else{items.unshift({id,...rec});drawDist();render()}
+  $("form").reset();imgData="";$("pv").style.display="none";fpos=null;$("locst").textContent="";drawFormDist();drawXtra();$("dlg").close();
+ }catch(e){alert("Could not save: "+(e.message||"no permission to add listings"))}
+};
+$("near").onclick=()=>{
+ if(pos){pos=null;$("near").classList.remove("on");render();return}
+ if(!navigator.geolocation){note(t("locErr"));return}
+ navigator.geolocation.getCurrentPosition(p=>{pos={lat:p.coords.latitude,lng:p.coords.longitude};$("near").classList.add("on");note("");render()},()=>note(t("locErr")),{timeout:10000});
+};
+$("getloc").onclick=()=>{
+ if(!navigator.geolocation){$("locst").textContent=t("locErr");return}
+ navigator.geolocation.getCurrentPosition(p=>{fpos={lat:p.coords.latitude,lng:p.coords.longitude};$("locst").textContent=t("locOk")},()=>{$("locst").textContent=t("locErr")},{timeout:10000});
+};
+applyLang();
+
+(async()=>{
+ try{
+  const [d,u]=await Promise.all([claude.use("db"),claude.use("user")]);
+  if(u){try{uid=await u.id();canEdit=u.canEdit()}catch(e){}}
+  if(!d){note("Preview mode: listings you add stay on this device only.");return}
+  db=d;
+  db.collection("listings").onSnapshot(s=>{
+   items=s.docs.map(x=>({id:x.id,...x.data()})).sort((a,b)=>(b.created||0)-(a.created||0));
+   drawDist();render();
+  },e=>note("Could not load shared listings ("+(e.code||"error")+")."));
+ }catch(e){note("Preview mode: listings you add stay on this device only.")}
+})();
+</script>
+</body>
+</html>
