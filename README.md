@@ -24,4 +24,4 @@ Open `index.html` in a browser. Without a backend, listings are stored in memory
 
 ## License
 Proprietary. All rights reserved. See [LICENSE](LICENSE).
-Copyright (c) 2026 [YOUR FULL NAME].
+Copyright (c) 2026 Nemin Orniel.
