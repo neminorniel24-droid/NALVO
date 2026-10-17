@@ -1,6 +1,6 @@
 <!--
   Nalvo - Local business directory for Tamil Nadu and Kerala
-  Copyright (c) 2026 [YOUR FULL NAME]. All rights reserved.
+  Copyright (c) 2026 Your Real Name. All rights reserved.
   Proprietary software. See the LICENSE file. Unauthorised copying,
   modification or redistribution is prohibited.
 -->
@@ -96,6 +96,11 @@ footer{position:relative}footer::before{content:"";position:absolute;left:0;righ
 .dd{margin-left:auto;flex:none;background:var(--priSoft);color:var(--pri);border-radius:99px;padding:1px 10px;font-size:12px;font-weight:800}
 .locrow{display:flex;align-items:center;gap:12px;margin-top:10px}.locrow .btn{padding:8px 14px;font-size:13.5px}.hint{color:var(--mut);font-size:13px}
 </style>
+<meta name="description" content="Nalvo: find local gyms, mechanics, training centres, tuition and more across Tamil Nadu and Kerala, with real photos, fees and timings.">
+<meta property="og:title" content="Nalvo - Local Business Directory | Tamil Nadu and Kerala">
+<meta property="og:description" content="Real details, photos and directions for local businesses in Tamil Nadu and Kerala.">
+<meta name="theme-color" content="#093d2b">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230e6a49'/><text x='32' y='46' font-size='40' text-anchor='middle' fill='%23ffb703' font-family='Georgia' font-weight='700'>N</text></svg>">
 </head>
 <body>
 <header class="top"><div class="bar">
@@ -133,6 +138,12 @@ footer{position:relative}footer::before{content:"";position:absolute;left:0;righ
  <div class="row"><button type="button" class="btn ghost" id="cancel" data-i="cancel"></button><button type="button" class="btn" id="save" data-i="pub"></button></div>
 </form></dialog>
 
+<dialog id="adlg"><div class="fm"><h2>Sign in to list your business</h2><div class="sub">We email you a one-time link. No password needed.</div>
+ <label>Email</label><input id="aem" type="email" autocomplete="email" maxlength="120">
+ <div class="hint" id="ast" style="margin-top:8px"></div>
+ <div class="row"><button type="button" class="btn ghost" id="acancel">Cancel</button><button type="button" class="btn" id="asend">Send sign-in link</button></div></div></dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
 const CATS={
  "Mechanics & Repair":["Vehicle types handled","Brands you specialise in","Typical service price","Pickup / drop available","Warranty on work"],
@@ -228,7 +239,7 @@ function render(){
   </div></article>`}).join("");
  $("grid").querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{
   if(!confirm("Delete this listing?"))return;
-  try{if(db)await db.collection("listings").doc(b.dataset.del).delete();else{items=items.filter(x=>x.id!==b.dataset.del);render()}}catch(e){note("You do not have permission to delete this listing.")}});
+  try{if(db)await delRemote(b.dataset.del);else{items=items.filter(x=>x.id!==b.dataset.del);render()}}catch(e){note("You do not have permission to delete this listing.")}});
 }
 
 function drawFormDist(){fillSel($("f_dist"),D[$("f_state").value||"Tamil Nadu"].map(d=>[d,d]))}
@@ -246,7 +257,8 @@ $("f_img").onchange=e=>{
   cv.getContext("2d").drawImage(im,0,0,w,h);imgData=cv.toDataURL("image/jpeg",.7);
   $("pv").src=imgData;$("pv").style.display="block"};im.src=r.result};r.readAsDataURL(f);
 };
-$("addBtn").onclick=$("fab").onclick=()=>$("dlg").showModal();
+function openAdd(){if(db&&!uid){$("adlg").showModal();return}$("dlg").showModal()}
+$("addBtn").onclick=$("fab").onclick=openAdd;
 $("cancel").onclick=()=>$("dlg").close();
 $("save").onclick=async()=>{
  const g=id=>$(id).value.trim();
@@ -256,7 +268,7 @@ $("save").onclick=async()=>{
   tags:g("f_tags").split(",").map(s=>s.trim()).filter(Boolean).slice(0,12),extra,img:imgData,...(fpos?{lat:fpos.lat,lng:fpos.lng}:{}),owner:uid||"anon",created:Date.now()};
  const id="b"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
  try{
-  if(db)await db.collection("listings").doc(id).set(rec);else{items.unshift({id,...rec});drawDist();render()}
+  if(db)await saveRemote(rec);else{items.unshift({id,...rec});drawDist();render()}
   $("form").reset();imgData="";$("pv").style.display="none";fpos=null;$("locst").textContent="";drawFormDist();drawXtra();$("dlg").close();
  }catch(e){alert("Could not save: "+(e.message||"no permission to add listings"))}
 };
@@ -271,17 +283,46 @@ $("getloc").onclick=()=>{
 };
 applyLang();
 
+// ---- Backend (Supabase) ----
+// Paste your own values from Supabase: Project Settings > API. The anon key is meant to be public.
+const SB_URL="https://YOUR-PROJECT.supabase.co",SB_KEY="YOUR-ANON-PUBLIC-KEY";
+let saveRemote=null,delRemote=null;
 (async()=>{
- try{
-  const [d,u]=await Promise.all([claude.use("db"),claude.use("user")]);
-  if(u){try{uid=await u.id();canEdit=u.canEdit()}catch(e){}}
-  if(!d){note("Preview mode: listings you add stay on this device only.");return}
-  db=d;
-  db.collection("listings").onSnapshot(s=>{
-   items=s.docs.map(x=>({id:x.id,...x.data()})).sort((a,b)=>(b.created||0)-(a.created||0));
-   drawDist();render();
-  },e=>note("Could not load shared listings ("+(e.code||"error")+")."));
- }catch(e){note("Preview mode: listings you add stay on this device only.")}
+ if(!window.supabase||SB_URL.includes("YOUR-PROJECT")){note("Preview mode: listings you add stay on this device only. Connect Supabase to go live (see SETUP.md).");return}
+ const sb=window.supabase.createClient(SB_URL,SB_KEY);
+ db=sb;
+ const ses=await sb.auth.getSession();uid=ses.data.session?ses.data.session.user.id:null;
+ sb.auth.onAuthStateChange((_e,x)=>{uid=x?x.user.id:null;render()});
+ async function load(){
+  const r=await sb.from("listings").select("*").order("created_at",{ascending:false});
+  if(r.error){note("Could not load listings. Please try again.");return}
+  items=r.data.map(x=>({...x,desc:x.descr,time:x.timings,map:x.maplink,created:Date.parse(x.created_at)}));
+  drawDist();render();
+ }
+ saveRemote=async rec=>{
+  let img=null;
+  if(rec.img){
+   const path=uid+"/"+crypto.randomUUID()+".jpg";
+   const blob=await (await fetch(rec.img)).blob();
+   const up=await sb.storage.from("photos").upload(path,blob,{contentType:"image/jpeg"});
+   if(up.error)throw up.error;
+   img=sb.storage.from("photos").getPublicUrl(path).data.publicUrl;
+  }
+  const row={name:rec.name,cat:rec.cat,state:rec.state,dist:rec.dist,area:rec.area,ph:rec.ph,timings:rec.time||null,addr:rec.addr||null,maplink:rec.map||null,descr:rec.desc||null,tags:rec.tags,extra:rec.extra,img,lat:rec.lat??null,lng:rec.lng??null};
+  const r=await sb.from("listings").insert(row);
+  if(r.error)throw r.error;
+  await load();
+ };
+ delRemote=async id=>{const r=await sb.from("listings").delete().eq("id",id);if(r.error)throw r.error;await load()};
+ $("acancel").onclick=()=>$("adlg").close();
+ $("asend").onclick=async()=>{
+  const em=$("aem").value.trim();
+  if(!/^\S+@\S+\.\S+$/.test(em)){$("ast").textContent="Please enter a valid email.";return}
+  $("ast").textContent="Sending...";
+  const r=await sb.auth.signInWithOtp({email:em,options:{emailRedirectTo:location.origin+location.pathname}});
+  $("ast").textContent=r.error?r.error.message:"Check your email and tap the link. Then come back and click List your business.";
+ };
+ await load();
 })();
 </script>
 </body>
