@@ -285,7 +285,7 @@ applyLang();
 
 // ---- Backend (Supabase) ----
 // Paste your own values from Supabase: Project Settings > API. The anon key is meant to be public.
-const SB_URL="https://YOUR-PROJECT.supabase.co",SB_KEY="YOUR-ANON-PUBLIC-KEY";
+const SB_URL="https://qiukzaxxvheekxwmalki.supabase.co",SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFpdWt6YXh4dmhlZWt4d21hbGtpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyNDM4OTksImV4cCI6MjEwNzgxOTg5OX0.RdqiJ2AVb8uXntSB52NmYiJ67HU3TOW7oADdgeJeeHA";
 let saveRemote=null,delRemote=null;
 (async()=>{
  if(!window.supabase||SB_URL.includes("YOUR-PROJECT")){note("Preview mode: listings you add stay on this device only. Connect Supabase to go live (see SETUP.md).");return}
