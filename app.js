@@ -40,7 +40,7 @@ ta:{edit:"திருத்து",rep:"புகார்",signout:"வெள�
 ml:{edit:"എഡിറ്റ്",rep:"റിപ്പോർട്ട്",signout:"സൈൻ ഔട്ട്",ver:"നൽവോ പരിശോധിച്ചത്",pend:"പരിശോധനയിൽ",near:"എന്റെ അടുത്ത്",locBtn:"എന്റെ നിലവിലെ സ്ഥലം ഉപയോഗിക്കുക",dir:"വഴി",km:"കി.മീ",locOk:"സ്ഥലം സേവ് ചെയ്തു",locErr:"നിങ്ങളുടെ സ്ഥലം ലഭ്യമായില്ല. ലൊക്കേഷൻ അനുമതി നൽകുക.",h1:"വിശ്വസ്തരായ പ്രാദേശിക സ്ഥാപനങ്ങളെ, യഥാർത്ഥ വിവരങ്ങളോടെ കണ്ടെത്തൂ.",p:"തമിഴ്നാട്ടിലും കേരളത്തിലുമായി മെക്കാനിക്ക്, ജിം, ട്രെയിനിംഗ് സെന്റർ, ട്യൂഷൻ എന്നിവയും മറ്റും. ഫോട്ടോ, സേവനങ്ങൾ, നിരക്ക്, സമയം - ഉടമകൾ തന്നെ നൽകിയത്.",add:"സ്ഥാപനം ചേർക്കുക",q:"തിരയുക: ബൈക്ക് സർവീസ്, വനിതാ ട്രെയിനർ, പൈത്തൺ കോഴ്സ്",allSt:"എല്ലാ സംസ്ഥാനങ്ങളും",allDist:"എല്ലാ ജില്ലകളും",all:"എല്ലാം",found:n=>n+" സ്ഥാപനങ്ങൾ കണ്ടെത്തി",none:"ഇതുവരെ സ്ഥാപനങ്ങളൊന്നും ചേർത്തിട്ടില്ല.",noneQ:"തിരച്ചിലിന് അനുയോജ്യമായവ ഇല്ല.",noneSub:"നിങ്ങൾക്ക് സ്ഥാപനമുണ്ടോ? ആദ്യം ചേർക്കൂ.",call:"വിളിക്കുക",wa:"വാട്സ്ആപ്പ്",map:"മാപ്പ്",del:"ഇല്ലാതാക്കുക",formT:"നിങ്ങളുടെ സ്ഥാപനം ചേർക്കുക",formS:"സൗജന്യം. കൂടുതൽ വിവരങ്ങൾ നൽകിയാൽ കൂടുതൽ ഉപഭോക്താക്കൾ.",f_name:"സ്ഥാപനത്തിന്റെ പേര് *",f_cat:"വിഭാഗം *",f_ph:"ഫോൺ / വാട്സ്ആപ്പ് *",f_state:"സംസ്ഥാനം *",f_dist:"ജില്ല *",f_area:"സ്ഥലം / പ്രദേശം *",f_time:"സമയം",f_addr:"പൂർണ്ണ വിലാസം",f_map:"ഗൂഗിൾ മാപ്പ് ലിങ്ക് (ഓപ്ഷണൽ)",f_desc:"നിങ്ങളുടെ സ്ഥാപനത്തെക്കുറിച്ച്",f_tags:"സേവനങ്ങൾ / പ്രത്യേകതകൾ (കോമ ഉപയോഗിച്ച് വേർതിരിക്കുക)",f_img:"കടയുടെ ഫോട്ടോ (ഓപ്ഷണൽ)",pub:"പ്രസിദ്ധീകരിക്കുക",cancel:"റദ്ദാക്കുക",det:"ഉപഭോക്താക്കൾ തിരയുന്ന വിവരങ്ങൾ",tm:"സമയം",ad:"വിലാസം"}};
 const $=id=>document.getElementById(id);
 const CK=Object.keys(CATS);
-let editId=null,lastSub=0,repId=null,pos=null,fpos=null,lang="en",items=[],cat="",db=null,uid=null,canEdit=false;
+let loaded=false,vonly=false,seen=new Set(),trackFn=null,editId=null,lastSub=0,repId=null,pos=null,fpos=null,lang="en",items=[],cat="",db=null,uid=null,canEdit=false;
 try{lang=localStorage.getItem("nl")||"en"}catch(e){}
 const t=k=>(T[lang]&&T[lang][k]!==undefined?T[lang][k]:T.en[k]);
 const cname=c=>lang==="en"?c:CN[lang][CK.indexOf(c)];
@@ -100,14 +100,37 @@ function applyLang(){
 document.querySelectorAll("#lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;try{localStorage.setItem("nl",lang)}catch(e){}applyLang()});
 
 const hav=(a,b,c,d)=>{const r=Math.PI/180,x=Math.sin((c-a)*r/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin((d-b)*r/2)**2;return 12742*Math.asin(Math.sqrt(x))};
+const fe=i=>!!(i.featured_until&&Date.parse(i.featured_until)>Date.now());
+function track(id,k){
+ if(!trackFn)return;
+ const it=items.find(x=>x.id===id);if(!it||(uid&&it.owner===uid))return;
+ if(k==="view"){if(seen.has(id))return;seen.add(id)}
+ trackFn(id,k);
+}
+function shareShop(id){
+ const it=items.find(x=>x.id===id);if(!it)return;
+ const url=location.origin+location.pathname+"#shop="+id,txt=it.name+" - "+it.area+", "+it.dist+" (Nalvo)";
+ if(navigator.share){navigator.share({title:it.name,text:txt,url}).catch(()=>{})}
+ else window.open("https://wa.me/?text="+encodeURIComponent(txt+" "+url),"_blank","noopener");
+}
+function gotoHash(){
+ const m=/^#shop=([\w-]+)$/.exec(location.hash);if(!m)return;
+ const el=document.getElementById("s-"+m[1]);if(!el)return;
+ el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("hl");
+}
+window.addEventListener("hashchange",gotoHash);
+$("grid").addEventListener("click",e=>{const a=e.target.closest("[data-t]");if(a)track(a.dataset.sid,a.dataset.t)});
 const dk=i=>(pos&&i.lat!=null&&i.lng!=null)?hav(pos.lat,pos.lng,i.lat,i.lng):1e9;
 const dtxt=i=>dk(i)<1e8?`<span class="dd">${dk(i).toFixed(1)} ${t("km")}</span>`:"";
 const dir=i=>/^https:\/\//.test(i.map||"")?i.map:"https://www.google.com/maps/dir/?api=1&destination="+(i.lat!=null&&i.lng!=null?i.lat+","+i.lng:encodeURIComponent([i.name,i.addr,i.area,i.dist,i.state].filter(Boolean).join(", ")));
 function render(){
+ if(!loaded){$("grid").innerHTML=Array(6).fill('<div class="card sk"><div class="ph"></div><div class="cb"><i></i><i></i><i></i></div></div>').join("");$("count").textContent="";return}
  const q=$("q").value.toLowerCase().trim(),s=$("state").value,d=$("dist").value;
  const list=items.filter(i=>(!cat||i.cat===cat)&&(!s||i.state===s)&&(!d||i.dist===d)&&(!q||JSON.stringify(i).toLowerCase().includes(q)));
- if(pos)list.sort((a,b)=>dk(a)-dk(b));
+ if(vonly)for(let k=list.length;k--;)if(!list[k].verified)list.splice(k,1);
+ if(pos)list.sort((a,b)=>dk(a)-dk(b));else list.sort((a,b)=>(fe(b)-fe(a))||((b.verified?1:0)-(a.verified?1:0))||((b.created||0)-(a.created||0)));
  $("count").textContent=t("found")(list.length);
+ $("hst").textContent=items.length?items.length+(items.length==1?" business":" businesses")+" in "+new Set(items.map(x=>x.dist)).size+(new Set(items.map(x=>x.dist)).size==1?" district":" districts"):"";
  if(!list.length){$("grid").innerHTML=`<div class="empty"><b>${t(items.length?"noneQ":"none")}</b>${t("noneSub")}</div>`;return}
  $("grid").innerHTML=list.map(i=>{
   const ph=String(i.ph||"").replace(/\D/g,"").slice(-10);
@@ -115,15 +138,18 @@ function render(){
   const ex=Object.entries(i.extra||{}).filter(e=>e[1]).map(e=>`<dt>${esc(e[0])}</dt><dd>${esc(e[1])}</dd>`).join("");
   const mine=(uid&&i.owner===uid)||canEdit;
   const map=/^https:\/\//.test(i.map||"")?`<a href="${esc(i.map)}" target="_blank" rel="noopener">${t("map")}</a>`:"";
-  return `<article class="card"><div class="ph" style="${i.img?`background-image:url('${esc(i.img)}')`:""}">${i.img?"":`<span class="wm">${esc((i.name||"?").trim().charAt(0).toUpperCase())}</span>`}<div class="shade"></div><div class="badge">${esc(cname(i.cat))}</div><h3>${esc(i.name)}</h3></div><div class="cb">
+  return `<article class="card${fe(i)?" fea":""}" id="s-${esc(i.id)}"><div class="ph" style="${i.img?`background-image:url('${esc(i.img)}')`:""}">${i.img?"":`<span class="wm">${esc((i.name||"?").trim().charAt(0).toUpperCase())}</span>`}<div class="shade"></div><div class="badge">${esc(cname(i.cat))}</div>${fe(i)?'<div class="fbd">Featured</div>':""}<h3>${esc(i.name)}</h3></div><div class="cb">
    ${i.status&&i.status!=="approved"?`<div class="stat">${i.status==="pending"?t("pend"):esc(i.status)}</div>`:""}
    <div class="loc">${PIN}<span>${esc(i.area)}, ${esc(i.dist)}, ${esc(sname(i.state)||i.state)}</span>${dtxt(i)}</div>
    ${i.verified?`<div class="vf">${t("ver")}</div>`:""}
    ${i.desc?`<div class="desc">${esc(i.desc)}</div>`:""}${tags?`<div class="tags">${tags}</div>`:""}
    ${(i.time||i.addr||ex||i.licence)?`<dl class="kv">${i.time?`<dt>${t("tm")}</dt><dd>${esc(i.time)}</dd>`:""}${i.addr?`<dt>${t("ad")}</dt><dd>${esc(i.addr)}</dd>`:""}${ex}${i.licence?`<dt>${esc((LIC[i.cat]||{}).l||"Licence")}</dt><dd>${esc(i.licence)}</dd>`:""}</dl>`:""}
-   <div class="acts"><a class="p" href="tel:+91${ph}">${t("call")}</a><a href="https://wa.me/91${ph}" target="_blank" rel="noopener noreferrer">${t("wa")}</a><a href="${esc(dir(i))}" target="_blank" rel="noopener noreferrer">${t("dir")}</a></div>
-   <div class="minor">${mine?`<button data-edit="${esc(i.id)}">${t("edit")}</button><button data-del="${esc(i.id)}">${t("del")}</button>`:`<button data-rep="${esc(i.id)}">${t("rep")}</button>`}</div>
+   <div class="acts"><a class="p" data-t="call" data-sid="${esc(i.id)}" href="tel:+91${ph}">${t("call")}</a><a data-t="wa" data-sid="${esc(i.id)}" href="https://wa.me/91${ph}" target="_blank" rel="noopener noreferrer">${t("wa")}</a><a data-t="dir" data-sid="${esc(i.id)}" href="${esc(dir(i))}" target="_blank" rel="noopener noreferrer">${t("dir")}</a></div>
+   ${mine&&db?`<div class="stats">Views ${i.views||0} · Calls ${i.calls||0} · WhatsApp ${i.wa||0} · Directions ${i.dirs||0}</div>`:""}
+   <div class="minor"><button data-share="${esc(i.id)}">Share</button>${mine?`<button data-edit="${esc(i.id)}">${t("edit")}</button><button data-del="${esc(i.id)}">${t("del")}</button>`:`<button data-rep="${esc(i.id)}">${t("rep")}</button>`}</div>
   </div></article>`}).join("");
+ $("grid").querySelectorAll("[data-share]").forEach(b=>b.onclick=()=>shareShop(b.dataset.share));
+ if(window.IntersectionObserver){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){io.unobserve(e.target);track(e.target.id.slice(2),"view")}}),{threshold:.5});$("grid").querySelectorAll(".card[id]").forEach(c=>io.observe(c))}
  $("grid").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(items.find(x=>x.id===b.dataset.edit)));
  $("grid").querySelectorAll("[data-rep]").forEach(b=>b.onclick=()=>{
   if(!db){note("Reporting works on the live site.");return}
@@ -140,7 +166,8 @@ function drawXtra(){
  $("xtra").innerHTML=`<h4>${esc(t("det"))}: ${esc(cname(c))}</h4>`+CATS[c].map(l=>`<label>${esc(l)}</label><input data-x="${esc(l)}" maxlength="120">`).join("")+(L?`<label>${esc(L.l)}${L.r?" *":" (optional)"}</label><input id="f_lic" maxlength="60" autocomplete="off">`:"");
 }
 $("f_cat").onchange=drawXtra;$("f_state").onchange=drawFormDist;
-$("state").onchange=()=>{drawDist();render()};$("dist").onchange=render;$("q").addEventListener("input",render);
+$("state").onchange=()=>{drawDist();render()};$("vonly").onclick=()=>{vonly=!vonly;$("vonly").classList.toggle("on",vonly);render()};
+$("dist").onchange=render;$("q").addEventListener("input",render);
 let imgData="";
 $("f_img").onchange=e=>{
  const f=e.target.files[0];if(!f)return;
@@ -161,7 +188,7 @@ function openEdit(it){
  $("dlg").showModal();
 }
 $("form").addEventListener("submit",e=>e.preventDefault());
-$("addBtn").onclick=$("fab").onclick=openAdd;
+$("addBtn").onclick=$("fab").onclick=$("pfree").onclick=openAdd;
 $("cancel").onclick=()=>$("dlg").close();
 $("save").onclick=async()=>{
  if($("f_web").value)return;
@@ -202,13 +229,14 @@ applyLang();
 const SB_URL=(window.NALVO_CONFIG||{}).url||"YOUR-PROJECT",SB_KEY=(window.NALVO_CONFIG||{}).key||"";
 let saveRemote=null,delRemote=null;
 (async()=>{
- if(!window.supabase||SB_URL.includes("YOUR-PROJECT")||!SB_KEY||SB_KEY.includes("YOUR-ANON")){note("Preview mode: listings you add stay on this device only. Connect Supabase to go live (see SETUP.md).");return}
+ if(!window.supabase||SB_URL.includes("YOUR-PROJECT")||!SB_KEY||SB_KEY.includes("YOUR-ANON")){note("Preview mode: listings you add stay on this device only. Connect Supabase to go live (see SETUP.md).");loaded=true;render();return}
  const sb=window.supabase.createClient(SB_URL,SB_KEY);
  db=sb;
  const ses=await sb.auth.getSession();uid=ses.data.session?ses.data.session.user.id:null;
  const setSO=()=>{$("so").hidden=!uid};setSO();$("so").onclick=()=>sb.auth.signOut();
  sb.auth.onAuthStateChange((_e,x)=>{uid=x?x.user.id:null;setSO();render()});
  $("rcancel").onclick=()=>$("rdlg").close();
+ trackFn=(id,k)=>{sb.rpc("track",{p_id:id,p_kind:k}).then(()=>{},()=>{})};
  $("rsend").onclick=async()=>{
   const reason=$("rr").value;if(!reason){$("rst").textContent="Please choose a reason.";return}
   const r=await sb.from("reports").insert({listing_id:repId,reason,note:clean($("rn").value).slice(0,300)||null});
@@ -217,8 +245,8 @@ let saveRemote=null,delRemote=null;
  };
  async function load(){
   const r=await sb.from("listings").select("*").order("created_at",{ascending:false});
-  if(r.error){note("Could not load listings. Please try again.");return}
-  items=r.data.map(x=>({...x,desc:x.descr,time:x.timings,map:x.maplink,created:Date.parse(x.created_at),img:(x.img&&x.img.startsWith(SB_URL+"/storage/"))?x.img:null}));
+  if(r.error){loaded=true;render();note("Could not load listings. Please try again.");return}
+  items=r.data.map(x=>({...x,desc:x.descr,time:x.timings,map:x.maplink,created:Date.parse(x.created_at),img:(x.img&&x.img.startsWith(SB_URL+"/storage/"))?x.img:null}));loaded=true;setTimeout(gotoHash,60);
   drawDist();render();
  }
  saveRemote=async rec=>{

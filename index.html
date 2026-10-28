@@ -108,6 +108,27 @@ footer{position:relative}footer::before{content:"";position:absolute;left:0;righ
 .ack input{width:auto;margin-top:3px}
 .hp{position:absolute;left:-9999px;opacity:0;height:0}
 footer a{color:var(--mut);margin:0 8px}
+
+.hst{margin-top:14px;font-weight:700;opacity:.92}
+.cbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:30px 0 16px}.cbar .count{margin:0}
+.chip2{border:1.5px solid var(--line);background:var(--card);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer;font-size:13.5px}
+.chip2.on{background:var(--pri);border-color:var(--pri);color:var(--priInk)}
+.fbd{position:absolute;right:12px;top:12px;background:#fff;color:#8a5a00;border-radius:99px;padding:4px 12px;font-size:12px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.card.fea{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
+.stats{font-size:12.5px;background:var(--priSoft);color:var(--pri);border-radius:8px;padding:6px 10px;font-weight:700}
+.card.hl{animation:hl 2.4s ease 1}@keyframes hl{0%,60%{box-shadow:0 0 0 4px var(--acc)}100%{box-shadow:var(--shadow)}}
+.sk .ph{background:var(--priSoft)}.sk i{display:block;height:14px;border-radius:7px;background:var(--line);animation:pulse 1.2s ease infinite alternate}.sk i:nth-child(2){width:70%}.sk i:nth-child(3){width:45%}
+@keyframes pulse{to{opacity:.4}}
+@media(prefers-reduced-motion:reduce){.sk i,.card.hl{animation:none}}
+.biz{background:linear-gradient(135deg,var(--h1),var(--h2));color:#fff;padding:50px 0 56px;margin-top:20px;border-top:3px double var(--gold)}
+.biz h2{font-family:'Noto Serif',Georgia,serif;font-size:clamp(24px,4vw,34px);margin:0 0 8px}.bsub{opacity:.88;margin:0 0 28px}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+.plan{position:relative;background:var(--card);color:var(--ink);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:10px}
+.plan h3{margin:0;font-size:20px}.price{font-size:28px;font-weight:800;color:var(--pri)}.price small{font-size:14px;color:var(--mut);font-weight:500}
+.plan ul{margin:0 0 8px;padding-left:18px;color:var(--mut);font-size:14px;flex:1}.plan li{margin:5px 0}
+.plan .btn{text-align:center;text-decoration:none;display:block}.plan.hot{box-shadow:0 0 0 3px var(--acc)}
+.pt{position:absolute;top:-12px;left:20px;background:var(--acc);color:var(--accInk);border-radius:99px;padding:3px 12px;font-size:12px;font-weight:800}
+.bnote{font-size:13px;opacity:.85;margin:20px 0 0}
 </style>
 <meta name="description" content="Nalvo: find local gyms, mechanics, training centres, tuition and more across Tamil Nadu and Kerala, with real photos, fees and timings.">
 <meta property="og:title" content="Nalvo - Local Business Directory | Tamil Nadu and Kerala">
@@ -125,13 +146,23 @@ footer a{color:var(--mut);margin:0 8px}
  <h1 data-i="h1"></h1><p data-i="p"></p>
  <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" data-ip="q" autocomplete="off"></div>
  <div class="pills"><select id="state"></select><select id="dist"></select><button type="button" class="nb" id="near"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span data-i="near"></span></button></div>
- <div class="note" id="note"></div>
+ <div class="hst" id="hst"></div><div class="note" id="note"></div>
 </div></section>
 <div class="wrap">
  <div class="tiles" id="chips"></div>
- <div class="count" id="count"></div>
+ <div class="cbar"><div class="count" id="count"></div><button class="chip2" id="vonly" type="button">Verified only</button></div>
  <main class="grid" id="grid"></main>
 </div>
+<section class="biz" id="business"><div class="wrap">
+ <h2>Own a business? Get found.</h2>
+ <p class="bsub">Listing is free. Upgrade when you want more customers.</p>
+ <div class="plans">
+  <div class="plan"><h3>Free</h3><div class="price">&#8377;0</div><ul><li>Photo, services, prices and timings</li><li>Call, WhatsApp and Directions buttons</li><li>A link you can share on WhatsApp and Instagram</li><li>See views and taps on your listing</li></ul><button type="button" class="btn ghost" id="pfree">List my business</button></div>
+  <div class="plan hot"><span class="pt">Most popular</span><h3>Featured</h3><div class="price">from &#8377;499<small> / month</small></div><ul><li>Shown first in your category and district</li><li>Featured tag on your card</li><li>Monthly summary of views and calls</li><li>Priority review of changes</li></ul><a class="btn" href="mailto:neminorniel24@gmail.com?subject=Nalvo%20Featured%20listing">Ask about Featured</a></div>
+  <div class="plan"><h3>Verified</h3><div class="price">from &#8377;499<small> / year</small></div><ul><li>We visit and confirm your business</li><li>Verified by Nalvo badge</li><li>Ranked above unverified listings</li><li>More trust, more calls</li></ul><a class="btn ghost" href="mailto:neminorniel24@gmail.com?subject=Nalvo%20Verified%20badge">Ask about Verified</a></div>
+ </div>
+ <p class="bnote">Introductory prices, subject to change. You pay by UPI only after we confirm your details.</p>
+</div></section>
 <button class="fab" id="fab"><span data-i="add"></span></button>
 <footer>Nalvo &middot; Free local listings for Tamil Nadu and Kerala<br><a href="legal.html#terms">Terms</a><a href="legal.html#privacy">Privacy</a><a href="legal.html#prohibited">Prohibited listings</a><a href="legal.html#report">Report or grievance</a></footer>
 
