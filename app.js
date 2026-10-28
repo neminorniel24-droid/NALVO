@@ -276,3 +276,14 @@ let saveRemote=null,delRemote=null;
  };
  await load();
 })();
+
+// ---- App install and offline support ----
+(function(){
+ if("serviceWorker" in navigator&&location.protocol==="https:"){navigator.serviceWorker.register("sw.js").catch(()=>{})}
+ const b=$("inst");let dp=null;
+ if(matchMedia("(display-mode: standalone)").matches||navigator.standalone)return;
+ window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e;b.hidden=false});
+ window.addEventListener("appinstalled",()=>{b.hidden=true});
+ if(/iphone|ipad|ipod/i.test(navigator.userAgent))b.hidden=false;
+ b.onclick=async()=>{if(dp){dp.prompt();await dp.userChoice;dp=null;b.hidden=true}else alert("To install Nalvo: tap the Share button, then choose Add to Home Screen.")};
+})();
